@@ -4,7 +4,7 @@ F-Service-Identification
 Library for Service Identification types.
 
 ## Types
-_based on https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse _
+_based on_ https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse
 
 Hierarchy:
 ```
