@@ -3,6 +3,14 @@ F-Service-Identification
 
 Library for Service Identification types.
 
+## Install
+```
+dotnet add package -s $NUGET_SERVER_PATH Lmc.ServiceIdentification
+```
+Where `$NUGET_SERVER_PATH` is the URL of nuget server
+- it should be http://development-nugetserver-common-stable.service.devel1-services.consul:31794 (_make sure you have a correct port, since it changes with deployment_)
+- see http://consul-1.infra.pprod/ui/devel1-services/services/development-nugetServer-common-stable for detailed information (and port)
+
 ## Types
 _based on_ https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse
 
