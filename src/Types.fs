@@ -69,3 +69,24 @@ module Zone =
 [<RequireQualifiedAccessAttribute>]
 module Bucket =
     let value (Bucket bucket) = bucket
+
+[<RequireQualifiedAccessAttribute>]
+module Box =
+    let createFromStrings domain context purpose version zone bucket =
+        {
+            Domain = Domain domain
+            Context = Context context
+            Purpose = Purpose purpose
+            Version = Version version
+            Zone = Zone zone
+            Bucket = Bucket bucket
+        }
+
+    let concat separator box =
+        [
+            box.Domain |> Domain.value
+            box.Context |> Context.value
+            box.Purpose |> Purpose.value
+            box.Version |> Version.value
+        ]
+        |> String.concat separator
