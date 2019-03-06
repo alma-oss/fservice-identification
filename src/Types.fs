@@ -71,6 +71,19 @@ module Bucket =
     let value (Bucket bucket) = bucket
 
 [<RequireQualifiedAccessAttribute>]
+module Instance =
+    let parse (separator: string) (instanceString: string) =
+        match instanceString.Split(separator) with
+        | [| domain; context; purpose; version |] ->
+            Some {
+                Domain = Domain domain
+                Context = Context context
+                Purpose = Purpose purpose
+                Version = Version version
+            }
+        | _ -> None
+
+[<RequireQualifiedAccessAttribute>]
 module Box =
     let createFromStrings domain context purpose version zone bucket =
         {
