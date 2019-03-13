@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 2.0.0 - 2019-03-13
 - Add function to create Box from values
 - [**BC**] Remove `Box.concat` function
 - Add `Box.instance` function
