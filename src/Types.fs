@@ -83,23 +83,40 @@ module Instance =
             }
         | _ -> None
 
-[<RequireQualifiedAccessAttribute>]
-module Box =
-    let createFromStrings domain context purpose version zone bucket =
-        {
-            Domain = Domain domain
-            Context = Context context
-            Purpose = Purpose purpose
-            Version = Version version
-            Zone = Zone zone
-            Bucket = Bucket bucket
-        }
-
-    let concat separator box =
+    let concat separator (instance: Instance) =
         [
-            box.Domain |> Domain.value
-            box.Context |> Context.value
-            box.Purpose |> Purpose.value
-            box.Version |> Version.value
+            instance.Domain |> Domain.value
+            instance.Context |> Context.value
+            instance.Purpose |> Purpose.value
+            instance.Version |> Version.value
         ]
         |> String.concat separator
+
+[<RequireQualifiedAccessAttribute>]
+module Box =
+    let createFromValues domain context purpose version zone bucket =
+        {
+            Domain = domain
+            Context = context
+            Purpose = purpose
+            Version = version
+            Zone = zone
+            Bucket = bucket
+        }
+
+    let createFromStrings domain context purpose version zone bucket =
+        createFromValues
+            (Domain domain)
+            (Context context)
+            (Purpose purpose)
+            (Version version)
+            (Zone zone)
+            (Bucket bucket)
+
+    let instance box =
+        {
+            Domain = box.Domain
+            Context = box.Context
+            Purpose = box.Purpose
+            Version = box.Version
+        }
