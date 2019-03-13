@@ -2,6 +2,10 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add function to create Box from values
+- [**BC**] Remove `Box.concat` function
+- Add `Box.instance` function
+- Add `Instance.concat` function
 
 ## 1.2.0 - 2019-03-06
 - Add function to parse Instance from string
