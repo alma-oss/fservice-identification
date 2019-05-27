@@ -46,31 +46,31 @@ type Box = {
     Bucket: Bucket
 }
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Domain =
     let value (Domain domain) = domain
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Context =
     let value (Context context) = context
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Purpose =
     let value (Purpose purpose) = purpose
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Version =
     let value (Version version) = version
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Zone =
     let value (Zone zone) = zone
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Bucket =
     let value (Bucket bucket) = bucket
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
 module Instance =
     let parse (separator: string) (instanceString: string) =
         match instanceString.Split(separator) with
@@ -92,7 +92,18 @@ module Instance =
         ]
         |> String.concat separator
 
-[<RequireQualifiedAccessAttribute>]
+[<RequireQualifiedAccess>]
+module Spot =
+    let parse (separator: string) (spotString: string) =
+        match spotString.Split(separator) with
+        | [| zone; bucket |] ->
+            Some {
+                Zone = Zone zone
+                Bucket = Bucket bucket
+            }
+        | _ -> None
+
+[<RequireQualifiedAccess>]
 module Box =
     let createFromValues domain context purpose version zone bucket =
         {

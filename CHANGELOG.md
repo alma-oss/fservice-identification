@@ -2,6 +2,7 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add function to parse Spot from string
 
 ## 2.0.0 - 2019-03-13
 - Add function to create Box from values
