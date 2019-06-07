@@ -131,3 +131,9 @@ module Box =
             Purpose = box.Purpose
             Version = box.Version
         }
+
+    let spot box =
+        {
+            Zone = box.Zone
+            Bucket = box.Bucket
+        }
