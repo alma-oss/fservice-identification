@@ -2,6 +2,10 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add more transformation functions
+    - `Instance.service`
+    - `Instance.processor`
+    - `Processor.service`
 
 ## 2.2.0 - 2019-06-07
 - Add `Box.spot` function
