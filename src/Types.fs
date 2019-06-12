@@ -71,6 +71,14 @@ module Bucket =
     let value (Bucket bucket) = bucket
 
 [<RequireQualifiedAccess>]
+module Processor =
+    let service (processor: Processor) =
+        {
+            Domain = processor.Domain
+            Context = processor.Context
+        }
+
+[<RequireQualifiedAccess>]
 module Instance =
     let parse (separator: string) (instanceString: string) =
         match instanceString.Split(separator) with
@@ -91,6 +99,19 @@ module Instance =
             instance.Version |> Version.value
         ]
         |> String.concat separator
+
+    let service (instance: Instance) =
+        {
+            Domain = instance.Domain
+            Context = instance.Context
+        }
+
+    let processor (instance: Instance) =
+        {
+            Domain = instance.Domain
+            Context = instance.Context
+            Purpose = instance.Purpose
+        }
 
 [<RequireQualifiedAccess>]
 module Spot =
