@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 2.4.0 - 2019-06-21
 - Add `ServiceIdentification` type and module
 - Update build dependencies, add Lint and Tests
 
