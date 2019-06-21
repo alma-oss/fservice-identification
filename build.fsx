@@ -6,6 +6,10 @@ open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 open Fake.Core.TargetOperators
 
+// =============================
+// === F# / Library template ===
+// =============================
+
 let tee f a =
     f a
     a
@@ -24,10 +28,17 @@ let runDotNetOrFail cmd workingDir =
     )
 
 let sourceDir = "."
-let nugetServerPort = 28742
-let nugetServer = sprintf "http://development-nugetserver-common-stable.service.devel1-services.consul:%i" nugetServerPort
+let nugetServer = sprintf "http://development-nugetserver-common-stable.service.devel1-services.consul:%i"
+let apiKey = "123456"
 
-let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json" nugetServer
+let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json"
+
+let nugetServerUrl p =
+    match p.Context.Arguments with
+    | head::_ ->
+        if head.StartsWith "http" then head
+        else head |> int |> nugetServer
+    | _ -> failwithf "Release target requires nuget server url or port"
 
 let runDotNetInSrc cmd = runDotNet cmd sourceDir
 let runDotNetInSrcOrFail cmd = runDotNetOrFail cmd sourceDir
@@ -47,9 +58,15 @@ Target.create "Clean" (fun _ ->
     |> Shell.cleanDirs
 )
 
-Target.create "Build" (fun _ ->
-    runDotNetInSrcOrFail (sprintf "restore --no-cache %s" sources) |> ignore
-    runDotNetInSrcOrFail "build --no-restore" |> ignore
+Target.create "Build" (fun p ->
+    let nugetServerUrl = nugetServerUrl p
+
+    runDotNet (sprintf "restore --no-cache %s" (sources nugetServerUrl)) sourceDir |> ignore
+    runDotNet "build --no-restore" sourceDir |> ignore
+
+    !! "**/*.*proj"
+    -- "example/**/*.*proj"
+    |> Seq.iter (DotNet.build id)
 )
 
 Target.create "Lint" (fun p ->
@@ -80,8 +97,22 @@ Target.create "Tests" (fun _ ->
     runDotNetOrFail "run" "./tests" |> ignore
 )
 
-Target.create "Release" (fun _ ->
-    runDotNetInSrcOrFail "publish -c Release -o /app" |> ignore
+Target.create "Release" (fun p ->
+    let nugetServerUrl = nugetServerUrl p
+
+    runDotNet "pack" sourceDir |> ignore
+
+    let pushToNuget path =
+        sourceDir
+        |> runDotNet (sprintf "nuget push %s -s %s -k %s" path nugetServerUrl apiKey)
+        |> ignore
+
+    !! "**/bin/**/*.nupkg"
+    |> Seq.iter (fun path ->
+        path
+        |> tee pushToNuget
+        |> Shell.moveFile "release"
+    )
 )
 
 Target.create "Watch" (fun _ ->
