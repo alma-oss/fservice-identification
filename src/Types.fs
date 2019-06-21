@@ -46,6 +46,11 @@ type Box = {
     Bucket: Bucket
 }
 
+type ServiceIdentification =
+    | ByService of Service
+    | ByProcessor of Processor
+    | ByInstance of Instance
+
 [<RequireQualifiedAccess>]
 module Domain =
     let value (Domain domain) = domain
@@ -71,12 +76,48 @@ module Bucket =
     let value (Bucket bucket) = bucket
 
 [<RequireQualifiedAccess>]
+module Service =
+    let parse (separator: string) (serviceString: string) =
+        match serviceString.Split(separator) with
+        | [| domain; context |] ->
+            Some {
+                Domain = Domain domain
+                Context = Context context
+            }
+        | _ -> None
+
+    let concat separator (service: Service) =
+        [
+            service.Domain |> Domain.value
+            service.Context |> Context.value
+        ]
+        |> String.concat separator
+
+[<RequireQualifiedAccess>]
 module Processor =
+    let parse (separator: string) (processorString: string) =
+        match processorString.Split(separator) with
+        | [| domain; context; purpose |] ->
+            Some {
+                Domain = Domain domain
+                Context = Context context
+                Purpose = Purpose purpose
+            }
+        | _ -> None
+
     let service (processor: Processor) =
         {
             Domain = processor.Domain
             Context = processor.Context
         }
+
+    let concat separator (processor: Processor) =
+        [
+            processor.Domain |> Domain.value
+            processor.Context |> Context.value
+            processor.Purpose |> Purpose.value
+        ]
+        |> String.concat separator
 
 [<RequireQualifiedAccess>]
 module Instance =
@@ -158,3 +199,47 @@ module Box =
             Zone = box.Zone
             Bucket = box.Bucket
         }
+
+module ServiceIdentification =
+    let parse (separator: string) (serviceIdentificationString: string) =
+        match serviceIdentificationString.Split(separator) with
+        | [| domain; context; purpose; version |] ->
+            ByInstance {
+                Domain = Domain domain
+                Context = Context context
+                Purpose = Purpose purpose
+                Version = Version version
+            }
+            |> Some
+        | [| domain; context; purpose |] ->
+            ByProcessor {
+                Domain = Domain domain
+                Context = Context context
+                Purpose = Purpose purpose
+            }
+            |> Some
+        | [| domain; context |] ->
+            ByService {
+                Domain = Domain domain
+                Context = Context context
+            }
+            |> Some
+        | _ -> None
+
+    let isMatchingUpstreamDependency (serviceIdentification: ServiceIdentification) (pattern: ServiceIdentification) =
+        match serviceIdentification with
+        | ByInstance instance ->
+            match pattern with
+            | ByInstance i -> instance = i
+            | ByProcessor p -> instance.Domain = p.Domain && instance.Context = p.Context && instance.Purpose = p.Purpose
+            | ByService s -> instance.Domain = s.Domain && instance.Context = s.Context
+        | ByProcessor processor ->
+            match pattern with
+            | ByInstance _ -> false
+            | ByProcessor p -> processor = p
+            | ByService s -> processor.Domain = s.Domain && processor.Context = s.Context
+        | ByService service ->
+            match pattern with
+            | ByInstance _ -> false
+            | ByProcessor _ -> false
+            | ByService s -> service.Domain = s.Domain && service.Context = s.Context

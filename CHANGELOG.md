@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `ServiceIdentification` type and module
+- Update build dependencies, add Lint and Tests
 
 ## 2.3.0 - 2019-06-12
 - Add more transformation functions

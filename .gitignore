@@ -14,6 +14,9 @@ bld/
 .paket/
 paket-files/
 
+# Ionide
+.ionide/
+
 # FAKE - F# Make
 .fake/
 
