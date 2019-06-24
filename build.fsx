@@ -11,7 +11,7 @@ open Fake.Core.TargetOperators
 // ===============================
 
 let sourceDir = "."
-let nugetServer = sprintf "http://development-router.devel1.services.lmc/nuget"
+let nugetServer = "http://development-router.devel1.services.lmc/nuget"
 let apiKey = "123456"
 
 let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json" nugetServer
