@@ -6,40 +6,46 @@ open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 open Fake.Core.TargetOperators
 
+// ===============================
+// === F# / Library fake build ===
+// ===============================
+
+let sourceDir = "."
+let nugetServer = sprintf "http://development-router.devel1.services.lmc/nuget"
+let apiKey = "123456"
+
+let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json" nugetServer
+
 let tee f a =
     f a
     a
 
-let runDotNet cmd workingDir =
-    let options =
-        DotNet.Options.withWorkingDirectory workingDir
-        >> DotNet.Options.withRedirectOutput true
+module private DotnetCore =
+    let run cmd workingDir =
+        let options =
+            DotNet.Options.withWorkingDirectory workingDir
+            >> DotNet.Options.withRedirectOutput true
 
-    DotNet.exec options cmd ""
+        DotNet.exec options cmd ""
 
-let runDotNetOrFail cmd workingDir =
-    runDotNet cmd workingDir
-    |> tee (fun result ->
-        if result.ExitCode <> 0 then failwithf "'dotnet %s' failed in %s" cmd workingDir
-    )
+    let runOrFail cmd workingDir =
+        run cmd workingDir
+        |> tee (fun result ->
+            if result.ExitCode <> 0 then failwithf "'dotnet %s' failed in %s" cmd workingDir
+        )
+        |> ignore
 
-let sourceDir = "."
-let nugetServerPort = 28742
-let nugetServer = sprintf "http://development-nugetserver-common-stable.service.devel1-services.consul:%i" nugetServerPort
+    let runInSrc cmd = run cmd sourceDir
+    let runInSrcOrFail cmd = runOrFail cmd sourceDir
 
-let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json" nugetServer
+    let installOrUpdateTool tool =
+        // Global tool dir must be in PATH - ${PATH}:/root/.dotnet/tools
+        let toolCommand action =
+            sprintf "tool %s --global %s" action tool
 
-let runDotNetInSrc cmd = runDotNet cmd sourceDir
-let runDotNetInSrcOrFail cmd = runDotNetOrFail cmd sourceDir
-
-let installOrUpdateTool tool =
-    let toolCommand action =
-        sprintf "tool %s --global %s" action tool
-
-    match runDotNetInSrc (toolCommand "install") with
-    | { ExitCode = code } when code <> 0 -> runDotNetInSrcOrFail (toolCommand "update")
-    | __ -> __
-    |> ignore
+        match runInSrc (toolCommand "install") with
+        | { ExitCode = code } when code <> 0 -> runInSrcOrFail (toolCommand "update")
+        | _ -> ()
 
 Target.create "Clean" (fun _ ->
     !! "**/bin"
@@ -48,12 +54,16 @@ Target.create "Clean" (fun _ ->
 )
 
 Target.create "Build" (fun _ ->
-    runDotNetInSrcOrFail (sprintf "restore --no-cache %s" sources) |> ignore
-    runDotNetInSrcOrFail "build --no-restore" |> ignore
+    DotnetCore.runOrFail (sprintf "restore --no-cache %s" sources) sourceDir
+    DotnetCore.runOrFail "build --no-restore" sourceDir
+
+    !! "**/*.*proj"
+    -- "example/**/*.*proj"
+    |> Seq.iter (DotNet.build id)
 )
 
 Target.create "Lint" (fun p ->
-    installOrUpdateTool "dotnet-fsharplint"
+    DotnetCore.installOrUpdateTool "dotnet-fsharplint"
 
     let checkResult (result: ProcessResult) =
         let rec check: string list -> unit = function
@@ -72,29 +82,35 @@ Target.create "Lint" (fun p ->
         |> check
 
     !! "**/*.fsproj"
-    |> Seq.map (sprintf "fsharplint -f %s" >> runDotNetInSrcOrFail)
+    |> Seq.map (sprintf "fsharplint -f %s" >> DotnetCore.runInSrc)
     |> Seq.iter checkResult
 )
 
-Target.create "Tests" (fun _ ->
-    runDotNetOrFail "run" "./tests" |> ignore
+Target.create "Release" (fun _ ->
+    DotnetCore.runInSrcOrFail "pack"
+
+    let pushToNuget path =
+        DotnetCore.runInSrcOrFail (sprintf "nuget push %s -s %s -k %s" path nugetServer apiKey)
+
+    !! "**/bin/**/*.nupkg"
+    |> Seq.iter (fun path ->
+        path
+        |> tee pushToNuget
+        |> Shell.moveFile "release"
+    )
 )
 
-Target.create "Release" (fun _ ->
-    runDotNetInSrcOrFail "publish -c Release -o /app" |> ignore
+Target.create "Tests" (fun _ ->
+    DotnetCore.runOrFail "run" "tests"
 )
 
 Target.create "Watch" (fun _ ->
-    runDotNetInSrcOrFail "watch run" |> ignore
-)
-
-Target.create "Run" (fun _ ->
-    runDotNetInSrcOrFail "run" |> ignore
+    DotnetCore.runInSrcOrFail "watch run"
 )
 
 "Clean"
     ==> "Build"
     ==> "Lint"
-    ==> "Release" <=> "Tests" <=> "Watch" <=> "Run"
+    ==> "Release" <=> "Watch" <=> "Tests"
 
 Target.runOrDefaultWithArguments "Build"

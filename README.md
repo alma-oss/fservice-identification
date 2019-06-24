@@ -8,8 +8,7 @@ Library for Service Identification types.
 dotnet add package -s $NUGET_SERVER_PATH Lmc.ServiceIdentification
 ```
 Where `$NUGET_SERVER_PATH` is the URL of nuget server
-- it should be http://development-nugetserver-common-stable.service.devel1-services.consul:31794 (_make sure you have a correct port, since it changes with deployment_)
-- see http://consul-1.infra.pprod/ui/devel1-services/services/development-nugetServer-common-stable for detailed information (and port)
+- it should be http://development-router.devel1.services.lmc/nuget
 
 ## Types
 _based on_ https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse
@@ -38,7 +37,7 @@ domain  context
 ```
 
 ## Release
-1. Increment version in `src/ServiceIdentification.fsproj`
+1. Increment version in `ServiceIdentification.fsproj`
 2. Update `CHANGELOG.md`
 3. Commit new version and tag it
 4. Run `$ fake build target release`

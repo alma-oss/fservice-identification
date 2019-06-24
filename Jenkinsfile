@@ -7,34 +7,26 @@ pipeline {
     }
 
     environment {
-        testImage = "service-identification-tests"
+        libraryImage = "fservice-identification"
     }
 
     stages {
-        stage("Build") {
-            parallel {
-                stage('Tests') {
-                    steps {
-                        sh "docker build --no-cache -f tests/Dockerfile -t ${testImage} ."
-                    }
-                }
+        stage('Library') {
+            steps {
+                sh "docker build --no-cache -t ${libraryImage} ."
             }
         }
 
-        stage('Unit tests') {
+        stage('Check') {
             steps {
-                sh "docker container run --rm ${testImage}"
+                sh "docker container run --rm ${libraryImage}"
             }
         }
 
         stage('Cleanup') {
-            parallel {
-                stage('Tests') {
-                    steps {
-                        script {
-                            sh "docker rmi --force `docker images -q ${testImage} | uniq`"
-                        }
-                    }
+            steps {
+                script {
+                    sh "docker rmi --force `docker images -q ${libraryImage} | uniq`"
                 }
             }
         }
