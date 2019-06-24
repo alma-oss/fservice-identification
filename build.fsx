@@ -111,6 +111,7 @@ Target.create "Watch" (fun _ ->
 "Clean"
     ==> "Build"
     ==> "Lint"
-    ==> "Release" <=> "Watch" <=> "Tests"
+    ==> "Tests"
+    ==> "Release" <=> "Watch"
 
 Target.runOrDefaultWithArguments "Build"
