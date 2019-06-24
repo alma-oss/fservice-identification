@@ -1,0 +1,24 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Paket dependency manager
+.paket/
+paket-files/
+
+# Ionide
+.ionide/
+
+# FAKE - F# Make
+.fake/
+
+# Released
+release/*.nupkg

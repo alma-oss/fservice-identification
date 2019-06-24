@@ -1,37 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine AS build-env
 
 # based on https://github.com/dotnet/dotnet-docker/issues/632
-RUN \
-    apk update \
-    && apk add \
-        bash \
-    ;
-
-# copy build scripts
-COPY ./fake.sh /service-identification/
-COPY ./build.fsx /service-identification/
-COPY ./paket.dependencies /service-identification/
-COPY ./paket.lock /service-identification/
-
-# copy app
-COPY ./ServiceIdentification.fsproj /service-identification/
-COPY ./src /service-identification/src
-
-# copy tests
-COPY ./tests/MatchingServiceIdentification.fs /service-identification/tests/MatchingServiceIdentification.fs
-COPY ./tests/Tests.fs /service-identification/tests/Tests.fs
-COPY ./tests/tests.fsproj /service-identification/tests/tests.fsproj
-
-WORKDIR /service-identification/tests
-
-RUN \
-    dotnet restore \
-    && dotnet publish -c Release -o /tests \
-    ;
-
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2-alpine
-
 # Install runtime dependencies
 RUN \
     apk update \
@@ -55,7 +24,24 @@ RUN \
     && update-ca-certificates \
     ;
 
-WORKDIR /tests
-COPY --from=build-env /tests .
+ENV PATH="${PATH}:/root/.dotnet/tools"
 
-CMD ["dotnet", "tests.dll"]
+# build scripts
+COPY ./fake.sh /fservice-identification/
+COPY ./build.fsx /fservice-identification/
+COPY ./paket.dependencies /fservice-identification/
+COPY ./paket.lock /fservice-identification/
+
+# sources
+COPY ./ServiceIdentification.fsproj /fservice-identification/
+COPY ./src /fservice-identification/src
+
+# copy tests
+COPY ./tests /fservice-identification/tests
+
+WORKDIR /fservice-identification
+
+RUN \
+    ./fake.sh build target Build
+
+CMD ["./fake.sh", "build", "target", "Tests"]
