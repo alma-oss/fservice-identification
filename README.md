@@ -4,11 +4,18 @@ F-Service-Identification
 Library for Service Identification types.
 
 ## Install
+
+Add following into `paket.dependencies`
 ```
-dotnet add package -s $NUGET_SERVER_PATH Lmc.ServiceIdentification
+git ssh://git@stash.int.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
+# LMC Nuget dependencies:
+nuget Lmc.ServiceIdentification
 ```
-Where `$NUGET_SERVER_PATH` is the URL of nuget server
-- it should be http://development-router.devel1.services.lmc/nuget
+
+Add following into `paket.references`
+```
+Lmc.ServiceIdentification
+```
 
 ## Types
 _based on_ https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse

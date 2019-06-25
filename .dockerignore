@@ -12,6 +12,7 @@ bld/
 
 # Paket dependency manager
 .paket/
+packages/
 paket-files/
 
 # Ionide
