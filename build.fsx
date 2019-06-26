@@ -11,10 +11,6 @@ open Fake.Core.TargetOperators
 // ===============================
 
 let sourceDir = "."
-let nugetServer = "http://development-router.devel1.services.lmc/nuget"
-let apiKey = "123456"
-
-let sources = sprintf "-s %s -s https://api.nuget.org/v3/index.json" nugetServer
 
 let tee f a =
     f a
@@ -47,16 +43,16 @@ module private DotnetCore =
         | { ExitCode = code } when code <> 0 -> runInSrcOrFail (toolCommand "update")
         | _ -> ()
 
-Target.create "Clean" (fun _ ->
-    !! "**/bin"
-    ++ "**/obj"
-    |> Shell.cleanDirs
+Target.create "Clean" (fun p ->
+    if p.Context.Arguments |> Seq.contains "no-clean"
+    then Trace.tracefn "Clean is skipped"
+    else
+        !! "**/bin"
+        ++ "**/obj"
+        |> Shell.cleanDirs
 )
 
 Target.create "Build" (fun _ ->
-    DotnetCore.runOrFail (sprintf "restore --no-cache %s" sources) sourceDir
-    DotnetCore.runOrFail "build --no-restore" sourceDir
-
     !! "**/*.*proj"
     -- "example/**/*.*proj"
     |> Seq.iter (DotNet.build id)
@@ -89,15 +85,8 @@ Target.create "Lint" (fun p ->
 Target.create "Release" (fun _ ->
     DotnetCore.runInSrcOrFail "pack"
 
-    let pushToNuget path =
-        DotnetCore.runInSrcOrFail (sprintf "nuget push %s -s %s -k %s" path nugetServer apiKey)
-
     !! "**/bin/**/*.nupkg"
-    |> Seq.iter (fun path ->
-        path
-        |> tee pushToNuget
-        |> Shell.moveFile "release"
-    )
+    |> Seq.iter (Shell.moveFile "release")
 )
 
 Target.create "Tests" (fun _ ->
