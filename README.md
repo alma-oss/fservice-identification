@@ -48,6 +48,7 @@ domain  context
 2. Update `CHANGELOG.md`
 3. Commit new version and tag it
 4. Run `$ fake build target release`
+5. Go to `nuget-server` repo, run `faket build target copyAll` and push new versions
 
 ## Development
 ### Requirements
