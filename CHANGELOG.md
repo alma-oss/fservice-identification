@@ -2,6 +2,9 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Change `ServiceIdentification` module
+    - Add `concat` function
+    - [**BC**] Remove `isMatchingUpstreamDependency` function
 
 ## 2.5.0 - 2019-06-24
 - Add lint
