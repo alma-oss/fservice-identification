@@ -1,4 +1,5 @@
 framework: netcoreapp2.2
+storage: none
 
 source https://api.nuget.org/v3/index.json
 nuget FSharp.Core
@@ -7,6 +8,7 @@ git ssh://git@stash.int.lmc.cz:7999/archi/nuget-server.git master Packages: /nug
 # LMC Nuget dependencies:
 
 group Tests
+    storage: none
     source https://api.nuget.org/v3/index.json
     nuget Expecto
     nuget YoloDev.Expecto.TestSdk
