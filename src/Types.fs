@@ -231,3 +231,20 @@ module ServiceIdentification =
         | ByService s -> s |> Service.concat separator
         | ByProcessor p -> p |> Processor.concat separator
         | ByInstance i -> i |> Instance.concat separator
+
+    let isMatching pattern = function
+        | ByInstance instance ->
+            match pattern with
+            | ByInstance i -> instance = i
+            | ByProcessor p -> instance.Domain = p.Domain && instance.Context = p.Context && instance.Purpose = p.Purpose
+            | ByService s -> instance.Domain = s.Domain && instance.Context = s.Context
+        | ByProcessor processor ->
+            match pattern with
+            | ByInstance _ -> false
+            | ByProcessor p -> processor = p
+            | ByService s -> processor.Domain = s.Domain && processor.Context = s.Context
+        | ByService service ->
+            match pattern with
+            | ByInstance _ -> false
+            | ByProcessor _ -> false
+            | ByService s -> service.Domain = s.Domain && service.Context = s.Context

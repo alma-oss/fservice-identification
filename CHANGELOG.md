@@ -2,6 +2,7 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `ServiceIdentification.isMatching` function
 
 ## 2.6.0 - 2019-08-12
 - Change `ServiceIdentification` module
