@@ -2,6 +2,13 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add more create functions
+    - `Processor.ofService`
+    - `Instance.ofService`
+    - `Instance.ofProcessor`
+    - `Box.ofService`
+    - `Box.ofProcessor`
+    - `Box.ofInstance`
 
 ## 3.0.0 - 2019-08-12
 - Add `ServiceIdentification.isMatching` function
