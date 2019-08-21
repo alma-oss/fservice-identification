@@ -105,6 +105,13 @@ module Processor =
             }
         | _ -> None
 
+    let ofService (service: Service) purpose =
+        {
+            Domain = service.Domain
+            Context = service.Context
+            Purpose = purpose
+        }
+
     let service (processor: Processor) =
         {
             Domain = processor.Domain
@@ -131,6 +138,22 @@ module Instance =
                 Version = Version version
             }
         | _ -> None
+
+    let ofService (service: Service) purpose version =
+        {
+            Domain = service.Domain
+            Context = service.Context
+            Purpose = purpose
+            Version = version
+        }
+
+    let ofProcessor (processor: Processor) version =
+        {
+            Domain = processor.Domain
+            Context = processor.Context
+            Purpose = processor.Purpose
+            Version = version
+        }
 
     let concat separator (instance: Instance) =
         [
@@ -185,6 +208,36 @@ module Box =
             (Version version)
             (Zone zone)
             (Bucket bucket)
+
+    let ofService (service: Service) purpose version zone bucket =
+        {
+            Domain = service.Domain
+            Context = service.Context
+            Purpose = purpose
+            Version = version
+            Zone = zone
+            Bucket = bucket
+        }
+
+    let ofProcessor (processor: Processor) version zone bucket =
+        {
+            Domain = processor.Domain
+            Context = processor.Context
+            Purpose = processor.Purpose
+            Version = version
+            Zone = zone
+            Bucket = bucket
+        }
+
+    let ofInstance (instance: Instance) zone bucket =
+        {
+            Domain = instance.Domain
+            Context = instance.Context
+            Purpose = instance.Purpose
+            Version = instance.Version
+            Zone = zone
+            Bucket = bucket
+        }
 
     let instance box =
         {
