@@ -93,6 +93,9 @@ module Service =
         ]
         |> String.concat separator
 
+    let domain ({ Domain = domain }: Service) = domain
+    let context ({ Context = context }: Service) = context
+
 [<RequireQualifiedAccess>]
 module Processor =
     let parse (separator: string) (processorString: string) =
@@ -117,6 +120,8 @@ module Processor =
             Domain = processor.Domain
             Context = processor.Context
         }
+
+    let purpose ({ Purpose = purpose }: Processor) = purpose
 
     let concat separator (processor: Processor) =
         [
@@ -177,6 +182,8 @@ module Instance =
             Purpose = instance.Purpose
         }
 
+    let version ({ Version = version }: Instance) = version
+
 [<RequireQualifiedAccess>]
 module Spot =
     let parse (separator: string) (spotString: string) =
@@ -187,6 +194,9 @@ module Spot =
                 Bucket = Bucket bucket
             }
         | _ -> None
+
+    let zone ({ Zone = zone }: Spot) = zone
+    let bucket ({ Bucket = bucket }: Spot) = bucket
 
 [<RequireQualifiedAccess>]
 module Box =
