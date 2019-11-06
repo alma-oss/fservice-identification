@@ -4,7 +4,7 @@ storage: none
 source https://api.nuget.org/v3/index.json
 nuget FSharp.Core
 
-git ssh://git@stash.int.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
+git ssh://git@bitbucket.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
 # LMC Nuget dependencies:
 
 group Tests

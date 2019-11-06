@@ -9,6 +9,7 @@
     - `Instance.version`
     - `Spot.zone`
     - `Spot.bucket`
+- Change git host
 
 ## 3.1.0 - 2019-08-21
 - Add more create functions
