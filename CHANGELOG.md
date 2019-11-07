@@ -2,6 +2,14 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add functions to access inner values
+    - `Service.domain`
+    - `Service.context`
+    - `Processor.purpose`
+    - `Instance.version`
+    - `Spot.zone`
+    - `Spot.bucket`
+- Change git host
 
 ## 3.1.0 - 2019-08-21
 - Add more create functions

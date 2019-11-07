@@ -7,7 +7,7 @@ Library for Service Identification types.
 
 Add following into `paket.dependencies`
 ```
-git ssh://git@stash.int.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
+git ssh://git@bitbucket.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
 # LMC Nuget dependencies:
 nuget Lmc.ServiceIdentification
 ```
@@ -18,7 +18,7 @@ Lmc.ServiceIdentification
 ```
 
 ## Types
-_based on_ https://stash.int.lmc.cz/projects/ARCHI/repos/service-mesh/browse
+_based on_ https://bitbucket.lmc.cz/projects/ARCHI/repos/service-mesh/browse
 
 Hierarchy:
 ```

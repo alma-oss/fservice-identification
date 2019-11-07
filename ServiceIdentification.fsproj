@@ -6,7 +6,7 @@
     <OutputType>Library</OutputType>
     <PackageId>Lmc.ServiceIdentification</PackageId>
     <Version>3.1.0</Version>
-    <RepositoryUrl>https://stash.int.lmc.cz/projects/ARCHI/repos/fservice-identification/browse</RepositoryUrl>
+    <RepositoryUrl>https://bitbucket.lmc.cz/projects/ARCHI/repos/fservice-identification/browse</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
