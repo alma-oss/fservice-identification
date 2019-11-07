@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 3.2.0 - 2019-11-07
 - Add functions to access inner values
     - `Service.domain`
     - `Service.context`
