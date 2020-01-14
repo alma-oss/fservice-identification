@@ -265,8 +265,13 @@ module Box =
 
 [<RequireQualifiedAccess>]
 module ServiceIdentification =
+    let service = function
+        | ByService service -> service
+        | ByProcessor processor -> processor |> Processor.service
+        | ByInstance instance -> instance |> Instance.service
+
     let parse (separator: string) (serviceIdentificationString: string) =
-        match serviceIdentificationString.Split(separator) with
+        match serviceIdentificationString.Split separator with
         | [| domain; context; purpose; version |] ->
             ByInstance {
                 Domain = Domain domain

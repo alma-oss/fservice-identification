@@ -14,6 +14,10 @@ COPY ./src /fservice-identification/src
 # copy tests
 COPY ./tests /fservice-identification/tests
 
+# others
+COPY ./.git /fservice-identification/.git
+COPY ./CHANGELOG.md /fservice-identification/
+
 WORKDIR /fservice-identification
 
 RUN \
