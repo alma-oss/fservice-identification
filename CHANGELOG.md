@@ -4,6 +4,8 @@
 ## Unreleased
 - Add function to access inner values
     - `ServiceIdentification.service`
+- Update dependencies
+- Add `AssemblyInfo`
 
 ## 3.2.0 - 2019-11-07
 - Add functions to access inner values

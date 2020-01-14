@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="MatchingServiceIdentification.fs" />
     <Compile Include="Tests.fs" />
   </ItemGroup>
