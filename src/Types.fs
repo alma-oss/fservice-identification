@@ -14,6 +14,32 @@ type Version = Version of string
 type Zone = Zone of string
 type Bucket = Bucket of string
 
+// Patterns
+
+[<RequireQualifiedAccess>]
+type PurposePattern =
+    | Purpose of Purpose
+    | Any
+
+[<RequireQualifiedAccess>]
+type VersionPattern =
+    | Version of Version
+    | Any
+
+[<RequireQualifiedAccess>]
+type ZonePattern =
+    | Zone of Zone
+    | Any
+
+[<RequireQualifiedAccess>]
+type BucketPattern =
+    | Bucket of Bucket
+    | Any
+
+//
+// Composed types
+//
+
 type Service = {
     Domain: Domain
     Context: Context
@@ -46,6 +72,15 @@ type Box = {
     Bucket: Bucket
 }
 
+type BoxPattern = {
+    Domain: Domain
+    Context: Context
+    Purpose: PurposePattern
+    Version: VersionPattern
+    Zone: ZonePattern
+    Bucket: BucketPattern
+}
+
 type ServiceIdentification =
     | ByService of Service
     | ByProcessor of Processor
@@ -64,16 +99,40 @@ module Purpose =
     let value (Purpose purpose) = purpose
 
 [<RequireQualifiedAccess>]
+module PurposePattern =
+    let value = function
+        | PurposePattern.Purpose purpose -> purpose |> Purpose.value
+        | PurposePattern.Any -> "*"
+
+[<RequireQualifiedAccess>]
 module Version =
     let value (Version version) = version
+
+[<RequireQualifiedAccess>]
+module VersionPattern =
+    let value = function
+        | VersionPattern.Version version -> version |> Version.value
+        | VersionPattern.Any -> "*"
 
 [<RequireQualifiedAccess>]
 module Zone =
     let value (Zone zone) = zone
 
 [<RequireQualifiedAccess>]
+module ZonePattern =
+    let value = function
+        | ZonePattern.Zone zone -> zone |> Zone.value
+        | ZonePattern.Any -> "*"
+
+[<RequireQualifiedAccess>]
 module Bucket =
     let value (Bucket bucket) = bucket
+
+[<RequireQualifiedAccess>]
+module BucketPattern =
+    let value = function
+        | BucketPattern.Bucket bucket -> bucket |> Bucket.value
+        | BucketPattern.Any -> "*"
 
 [<RequireQualifiedAccess>]
 module Service =
@@ -200,7 +259,7 @@ module Spot =
 
 [<RequireQualifiedAccess>]
 module Box =
-    let createFromValues domain context purpose version zone bucket =
+    let createFromValues domain context purpose version zone bucket: Box =
         {
             Domain = domain
             Context = context
@@ -210,7 +269,7 @@ module Box =
             Bucket = bucket
         }
 
-    let createFromStrings domain context purpose version zone bucket =
+    let createFromStrings domain context purpose version zone bucket: Box =
         createFromValues
             (Domain domain)
             (Context context)
@@ -219,7 +278,7 @@ module Box =
             (Zone zone)
             (Bucket bucket)
 
-    let ofService (service: Service) purpose version zone bucket =
+    let ofService (service: Service) purpose version zone bucket: Box =
         {
             Domain = service.Domain
             Context = service.Context
@@ -229,7 +288,7 @@ module Box =
             Bucket = bucket
         }
 
-    let ofProcessor (processor: Processor) version zone bucket =
+    let ofProcessor (processor: Processor) version zone bucket: Box =
         {
             Domain = processor.Domain
             Context = processor.Context
@@ -239,7 +298,7 @@ module Box =
             Bucket = bucket
         }
 
-    let ofInstance (instance: Instance) zone bucket =
+    let ofInstance (instance: Instance) zone bucket: Box =
         {
             Domain = instance.Domain
             Context = instance.Context
@@ -249,7 +308,7 @@ module Box =
             Bucket = bucket
         }
 
-    let instance box =
+    let instance (box: Box) =
         {
             Domain = box.Domain
             Context = box.Context
@@ -257,11 +316,89 @@ module Box =
             Version = box.Version
         }
 
-    let spot box =
+    let spot (box: Box) =
         {
             Zone = box.Zone
             Bucket = box.Bucket
         }
+
+[<RequireQualifiedAccess>]
+module BoxPattern =
+    let ofService (service: Service) =
+        {
+            Domain = service.Domain
+            Context = service.Context
+            Purpose = PurposePattern.Any
+            Version = VersionPattern.Any
+            Zone = ZonePattern.Any
+            Bucket = BucketPattern.Any
+        }
+
+    let ofProcessor (processor: Processor) =
+        {
+            Domain = processor.Domain
+            Context = processor.Context
+            Purpose = PurposePattern.Purpose processor.Purpose
+            Version = VersionPattern.Any
+            Zone = ZonePattern.Any
+            Bucket = BucketPattern.Any
+        }
+
+    let ofInstance (instance: Instance) =
+        {
+            Domain = instance.Domain
+            Context = instance.Context
+            Purpose = PurposePattern.Purpose instance.Purpose
+            Version = VersionPattern.Version instance.Version
+            Zone = ZonePattern.Any
+            Bucket = BucketPattern.Any
+        }
+
+    let ofBox (box: Box) =
+        {
+            Domain = box.Domain
+            Context = box.Context
+            Purpose = PurposePattern.Purpose box.Purpose
+            Version = VersionPattern.Version box.Version
+            Zone = ZonePattern.Zone box.Zone
+            Bucket = BucketPattern.Bucket box.Bucket
+        }
+
+    let ofServiceIdentification = function
+        | ByService service -> ofService service
+        | ByProcessor processor -> ofProcessor processor
+        | ByInstance instance -> ofInstance instance
+
+    let isMatching ({ Domain = domain; Context = context; Purpose = purpose; Version = version; Zone = zone; Bucket = bucket }: Box): BoxPattern -> bool = function
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Version v; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Bucket b }   // instance + spot (box)
+            when d = domain && c = context && p = purpose && v = version && z = zone && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Version v; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Any }        // instance + zone
+            when d = domain && c = context && p = purpose && v = version && z = zone -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Version v; Zone = ZonePattern.Any; Bucket = BucketPattern.Bucket b }      // instance + bucket
+            when d = domain && c = context && p = purpose && v = version && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Version v; Zone = ZonePattern.Any; Bucket = BucketPattern.Any }           // instance
+            when d = domain && c = context && p = purpose && v = version -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Any; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Bucket b }         // processor + spot
+            when d = domain && c = context && p = purpose && z = zone && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Any; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Any }              // processor + zone
+            when d = domain && c = context && p = purpose && z = zone -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Any; Zone = ZonePattern.Any; Bucket = BucketPattern.Bucket b }            // processor + bucket
+            when d = domain && c = context && p = purpose && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Any; Zone = ZonePattern.Any; Bucket = BucketPattern.Any }                 // processor
+            when d = domain && c = context && p = purpose -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Any; Version = VersionPattern.Any; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Bucket b }               // service + spot
+            when d = domain && c = context && z = zone && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Any; Version = VersionPattern.Any; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Any }                    // service + zone
+            when d = domain && c = context && z = zone -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Any; Version = VersionPattern.Any; Zone = ZonePattern.Any; Bucket = BucketPattern.Bucket b }                  // service + bucket
+            when d = domain && c = context && b = bucket -> true
+        | { Domain = d; Context = c; Purpose = PurposePattern.Any; Version = VersionPattern.Any; Zone = ZonePattern.Any; Bucket = BucketPattern.Any }                       // service
+            when d = domain && c = context -> true
+        | _ -> false
+
+    let (|Matching|_|) box pattern =
+        if pattern |> isMatching box then Some ()
+        else None
 
 [<RequireQualifiedAccess>]
 module ServiceIdentification =
