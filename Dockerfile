@@ -1,7 +1,7 @@
-FROM dcreg.service.consul/prod/development-dotnet-core-sdk-common:latest
+FROM dcreg.service.consul/dev/development-dotnet-core-sdk-common:3.1
 
 # build scripts
-COPY ./fake.sh /fservice-identification/
+COPY ./build.sh /fservice-identification/
 COPY ./build.fsx /fservice-identification/
 COPY ./paket.dependencies /fservice-identification/
 COPY ./paket.references /fservice-identification/
@@ -15,12 +15,13 @@ COPY ./src /fservice-identification/src
 COPY ./tests /fservice-identification/tests
 
 # others
+COPY ./.config /fservice-identification/.config
 COPY ./.git /fservice-identification/.git
 COPY ./CHANGELOG.md /fservice-identification/
 
 WORKDIR /fservice-identification
 
 RUN \
-    ./fake.sh build target Build no-clean
+    ./build.sh -t Build no-clean
 
-CMD ["./fake.sh", "build", "target", "Tests", "no-clean"]
+CMD ["./build.sh", "-t", "Tests", "no-clean"]

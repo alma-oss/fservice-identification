@@ -2,6 +2,15 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- [**BC**] Change namespace to `Lmc.ServiceIdentification`
+- Add create functions `createFromValues` and `createFromStrings` to modules:
+    - `Service`
+    - `Processor`
+    - `Instance`
+    - `Spot`
+    - `Box`
+    - `BoxPattern`
+- Use .netcore 3.1
 
 ## 3.4.0 - 2020-03-02
 - Add pattern types and modules

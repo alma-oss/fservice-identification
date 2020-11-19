@@ -1,7 +1,7 @@
 module DependencyConsole.Test.MatchingServiceIdentification
 
 open Expecto
-open ServiceIdentification
+open Lmc.ServiceIdentification
 
 let orFail = function
     | Some value -> value
