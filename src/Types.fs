@@ -1,4 +1,4 @@
-namespace ServiceIdentification
+namespace Lmc.ServiceIdentification
 
 // domain ─┐─────────┐───────────┐──────────┐
 // context ┘ service │           │          │
@@ -15,6 +15,32 @@ type Zone = Zone of string
 type Bucket = Bucket of string
 
 // Patterns
+
+[<AutoOpen>]
+module internal Matching =
+    let (|IsDomain|_|) = function
+        | String.IsEmpty | Any -> None
+        | domain -> Some (IsDomain (Domain domain))
+
+    let (|IsContext|_|) = function
+        | String.IsEmpty | Any -> None
+        | context -> Some (IsContext (Context context))
+
+    let (|IsPurpose|_|) = function
+        | String.IsEmpty | Any -> None
+        | purpose -> Some (IsPurpose (Purpose purpose))
+
+    let (|IsVersion|_|) = function
+        | String.IsEmpty | Any -> None
+        | version -> Some (IsVersion (Version version))
+
+    let (|IsZone|_|) = function
+        | String.IsEmpty | Any -> None
+        | zone -> Some (IsZone (Zone zone))
+
+    let (|IsBucket|_|) = function
+        | String.IsEmpty | Any -> None
+        | bucket -> Some (IsBucket (Bucket bucket))
 
 [<RequireQualifiedAccess>]
 type PurposePattern =
@@ -102,7 +128,7 @@ module Purpose =
 module PurposePattern =
     let value = function
         | PurposePattern.Purpose purpose -> purpose |> Purpose.value
-        | PurposePattern.Any -> "*"
+        | PurposePattern.Any -> Any
 
 [<RequireQualifiedAccess>]
 module Version =
@@ -112,7 +138,7 @@ module Version =
 module VersionPattern =
     let value = function
         | VersionPattern.Version version -> version |> Version.value
-        | VersionPattern.Any -> "*"
+        | VersionPattern.Any -> Any
 
 [<RequireQualifiedAccess>]
 module Zone =
@@ -122,7 +148,7 @@ module Zone =
 module ZonePattern =
     let value = function
         | ZonePattern.Zone zone -> zone |> Zone.value
-        | ZonePattern.Any -> "*"
+        | ZonePattern.Any -> Any
 
 [<RequireQualifiedAccess>]
 module Bucket =
@@ -132,17 +158,27 @@ module Bucket =
 module BucketPattern =
     let value = function
         | BucketPattern.Bucket bucket -> bucket |> Bucket.value
-        | BucketPattern.Any -> "*"
+        | BucketPattern.Any -> Any
 
 [<RequireQualifiedAccess>]
 module Service =
     let parse (separator: string) (serviceString: string) =
         match serviceString.Split(separator) with
-        | [| domain; context |] ->
+        | [| IsDomain domain; IsContext context |] ->
             Some {
-                Domain = Domain domain
-                Context = Context context
+                Domain = domain
+                Context = context
             }
+        | _ -> None
+
+    let createFromValues domain context: Service =
+        {
+            Domain = domain
+            Context = context
+        }
+
+    let createFromStrings = function
+        | IsDomain domain, IsContext context -> Some (createFromValues domain context)
         | _ -> None
 
     let concat separator (service: Service) =
@@ -157,14 +193,25 @@ module Service =
 
 [<RequireQualifiedAccess>]
 module Processor =
-    let parse (separator: string) (processorString: string) =
+    let parse (separator: string) (processorString: string): Processor option =
         match processorString.Split(separator) with
-        | [| domain; context; purpose |] ->
+        | [| IsDomain domain; IsContext context; IsPurpose purpose |] ->
             Some {
-                Domain = Domain domain
-                Context = Context context
-                Purpose = Purpose purpose
+                Domain = domain
+                Context = context
+                Purpose = purpose
             }
+        | _ -> None
+
+    let createFromValues domain context purpose: Processor =
+        {
+            Domain = domain
+            Context = context
+            Purpose = purpose
+        }
+
+    let createFromStrings = function
+        | IsDomain domain, IsContext context, IsPurpose purpose -> Some (createFromValues domain context purpose)
         | _ -> None
 
     let ofService (service: Service) purpose =
@@ -194,13 +241,25 @@ module Processor =
 module Instance =
     let parse (separator: string) (instanceString: string) =
         match instanceString.Split(separator) with
-        | [| domain; context; purpose; version |] ->
+        | [| IsDomain domain; IsContext context; IsPurpose purpose; IsVersion version |] ->
             Some {
-                Domain = Domain domain
-                Context = Context context
-                Purpose = Purpose purpose
-                Version = Version version
+                Domain = domain
+                Context = context
+                Purpose = purpose
+                Version = version
             }
+        | _ -> None
+
+    let createFromValues domain context purpose version: Instance =
+        {
+            Domain = domain
+            Context = context
+            Purpose = purpose
+            Version = version
+        }
+
+    let createFromStrings = function
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version -> Some (createFromValues domain context purpose version)
         | _ -> None
 
     let ofService (service: Service) purpose version =
@@ -247,11 +306,21 @@ module Instance =
 module Spot =
     let parse (separator: string) (spotString: string) =
         match spotString.Split(separator) with
-        | [| zone; bucket |] ->
+        | [| IsZone zone; IsBucket bucket |] ->
             Some {
-                Zone = Zone zone
-                Bucket = Bucket bucket
+                Zone = zone
+                Bucket = bucket
             }
+        | _ -> None
+
+    let createFromValues zone bucket: Spot =
+        {
+            Zone = zone
+            Bucket = bucket
+        }
+
+    let createFromStrings = function
+        | IsZone zone, IsBucket bucket -> Some (createFromValues zone bucket)
         | _ -> None
 
     let zone ({ Zone = zone }: Spot) = zone
@@ -269,14 +338,9 @@ module Box =
             Bucket = bucket
         }
 
-    let createFromStrings domain context purpose version zone bucket: Box =
-        createFromValues
-            (Domain domain)
-            (Context context)
-            (Purpose purpose)
-            (Version version)
-            (Zone zone)
-            (Bucket bucket)
+    let createFromStrings = function
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, IsZone zone, IsBucket bucket -> Some (createFromValues domain context purpose version zone bucket)
+        | _ -> None
 
     let ofService (service: Service) purpose version zone bucket: Box =
         {
@@ -368,6 +432,46 @@ module BoxPattern =
         | ByService service -> ofService service
         | ByProcessor processor -> ofProcessor processor
         | ByInstance instance -> ofInstance instance
+
+    let createFromValues domain context purpose version zone bucket =
+        {
+            Domain = domain
+            Context = context
+            Purpose = purpose
+            Version = version
+            Zone = zone
+            Bucket = bucket
+        }
+
+    open Matching
+
+    let createFromStrings =
+        let ofService domain context = Service.createFromValues domain context |> ofService |> Some
+        let ofProcessor domain context purpose = Processor.createFromValues domain context purpose |> ofProcessor |> Some
+        let ofInstance domain context purpose version = Instance.createFromValues domain context purpose version |> ofInstance |> Some
+
+        let withZone zone = Option.map (fun (boxPattern: BoxPattern) -> { boxPattern with Zone = ZonePattern.Zone zone })
+        let withBucket bucket = Option.map (fun (boxPattern: BoxPattern) -> { boxPattern with Bucket = BucketPattern.Bucket bucket })
+        let withSpot zone bucket = withZone zone >> withBucket bucket
+
+        function
+        | IsDomain domain, IsContext context, Any,               Any,               Any,         Any             -> ofService domain context
+        | IsDomain domain, IsContext context, IsPurpose purpose, Any,               Any,         Any             -> ofProcessor domain context purpose
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, Any,         Any             -> ofInstance domain context purpose version
+
+        | IsDomain domain, IsContext context, Any,               Any,               IsZone zone, Any             -> ofService domain context                  |> withZone zone
+        | IsDomain domain, IsContext context, IsPurpose purpose, Any,               IsZone zone, Any             -> ofProcessor domain context purpose        |> withZone zone
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, IsZone zone, Any             -> ofInstance domain context purpose version |> withZone zone
+
+        | IsDomain domain, IsContext context, Any,               Any,               Any,         IsBucket bucket -> ofService domain context                  |> withBucket bucket
+        | IsDomain domain, IsContext context, IsPurpose purpose, Any,               Any,         IsBucket bucket -> ofProcessor domain context purpose        |> withBucket bucket
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, Any,         IsBucket bucket -> ofInstance domain context purpose version |> withBucket bucket
+
+        | IsDomain domain, IsContext context, Any,               Any,               IsZone zone, IsBucket bucket -> ofService domain context                  |> withSpot zone bucket
+        | IsDomain domain, IsContext context, IsPurpose purpose, Any,               IsZone zone, IsBucket bucket -> ofProcessor domain context purpose        |> withSpot zone bucket
+        | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, IsZone zone, IsBucket bucket -> ofInstance domain context purpose version |> withSpot zone bucket
+
+        | _ -> None
 
     let isMatching ({ Domain = domain; Context = context; Purpose = purpose; Version = version; Zone = zone; Bucket = bucket }: Box): BoxPattern -> bool = function
         | { Domain = d; Context = c; Purpose = PurposePattern.Purpose p; Version = VersionPattern.Version v; Zone = ZonePattern.Zone z; Bucket = BucketPattern.Bucket b }   // instance + spot (box)
