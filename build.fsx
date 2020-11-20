@@ -160,8 +160,7 @@ Target.create "Build" (fun _ ->
 )
 
 Target.create "Lint" <| skipOn "no-lint" (fun _ ->
-    let version = " --version 0.16.5"    // todo - remove when .net5.0 is used
-    DotnetCore.installOrUpdateTool toolsDir ("dotnet-fsharplint" + version)
+    DotnetCore.installOrUpdateTool toolsDir "dotnet-fsharplint"
 
     let checkResult (messages: string list) =
         let rec check: string list -> unit = function
