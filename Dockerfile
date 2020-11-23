@@ -1,25 +1,25 @@
 FROM dcreg.service.consul/dev/development-dotnet-core-sdk-common:5.0
 
 # build scripts
-COPY ./build.sh /fservice-identification/
-COPY ./build.fsx /fservice-identification/
-COPY ./paket.dependencies /fservice-identification/
-COPY ./paket.references /fservice-identification/
-COPY ./paket.lock /fservice-identification/
+COPY ./build.sh /lib/
+COPY ./build.fsx /lib/
+COPY ./paket.dependencies /lib/
+COPY ./paket.references /lib/
+COPY ./paket.lock /lib/
 
 # sources
-COPY ./ServiceIdentification.fsproj /fservice-identification/
-COPY ./src /fservice-identification/src
+COPY ./ServiceIdentification.fsproj /lib/
+COPY ./src /lib/src
 
 # copy tests
-COPY ./tests /fservice-identification/tests
+COPY ./tests /lib/tests
 
 # others
-COPY ./.config /fservice-identification/.config
-COPY ./.git /fservice-identification/.git
-COPY ./CHANGELOG.md /fservice-identification/
+COPY ./.config /lib/.config
+COPY ./.git /lib/.git
+COPY ./CHANGELOG.md /lib/
 
-WORKDIR /fservice-identification
+WORKDIR /lib
 
 RUN \
     ./build.sh -t Build no-clean
