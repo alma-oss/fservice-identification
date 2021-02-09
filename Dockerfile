@@ -4,19 +4,17 @@ FROM dcreg.service.consul/dev/development-dotnet-core-sdk-common:5.0
 COPY ./build.sh /lib/
 COPY ./build.fsx /lib/
 COPY ./paket.dependencies /lib/
-COPY ./paket.references /lib/
 COPY ./paket.lock /lib/
 
 # sources
-COPY ./ServiceIdentification.fsproj /lib/
 COPY ./src /lib/src
 
-# copy tests
+# tests
 COPY ./tests /lib/tests
 
 # others
-COPY ./.config /lib/.config
 COPY ./.git /lib/.git
+COPY ./.config /lib/.config
 COPY ./CHANGELOG.md /lib/
 
 WORKDIR /lib
