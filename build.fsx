@@ -31,7 +31,7 @@ type ToolDir =
 // 1. Information about the project to be used at NuGet and in AssemblyInfo files and other FAKE configuration
 // --------------------------------------------------------------------------------------------------------
 
-let project = "ServiceIdentification"
+let project = "Lmc.ServiceIdentification"
 let summary = "Library for Service Identification types."
 
 let release = ReleaseNotes.parse (System.IO.File.ReadAllLines "CHANGELOG.md" |> Seq.filter ((<>) "## Unreleased"))
