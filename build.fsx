@@ -14,7 +14,7 @@ type ToolDir =
     | Local of string
 
 // ========================================================================================================
-// === F# / Library fake build ==================================================================== 1.1.0 =
+// === F# / Fable Library fake build ============================================================== 1.2.0 =
 // --------------------------------------------------------------------------------------------------------
 // Options:
 //  - no-clean   - disables clean of dirs in the first step (required on CI)
@@ -199,7 +199,7 @@ Target.create "Tests" (fun _ ->
 )
 
 Target.create "Release" (fun _ ->
-    DotnetCore.runInRootOrFail "pack"
+    DotnetCore.runOrFail "pack" ("src" </> project)
 
     Directory.ensure "release"
 

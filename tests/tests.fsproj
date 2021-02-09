@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ServiceIdentification.fsproj">
-      <Name>ServiceIdentification.fsproj</Name>
+    <ProjectReference Include="../src/Lmc.ServiceIdentification/Lmc.ServiceIdentification.fsproj">
+      <Name>Lmc.ServiceIdentification.fsproj</Name>
     </ProjectReference>
   </ItemGroup>
 

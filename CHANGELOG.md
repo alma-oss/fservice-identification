@@ -2,6 +2,7 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Allow this library in Fable project
 
 ## 5.0.1 - 2020-11-23
 - Fix paket dependencies

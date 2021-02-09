@@ -443,8 +443,6 @@ module BoxPattern =
             Bucket = bucket
         }
 
-    open Matching
-
     let createFromStrings =
         let ofService domain context = Service.createFromValues domain context |> ofService |> Some
         let ofProcessor domain context purpose = Processor.createFromValues domain context purpose |> ofProcessor |> Some

@@ -17,6 +17,8 @@ Add following into `paket.references`
 Lmc.ServiceIdentification
 ```
 
+**Note**: You can also use this library in a Fable project.
+
 ## Types
 _based on_ https://bitbucket.lmc.cz/projects/ARCHI/repos/service-mesh/browse
 
