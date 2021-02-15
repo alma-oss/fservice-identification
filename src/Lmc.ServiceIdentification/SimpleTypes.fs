@@ -1,79 +1,82 @@
 namespace Lmc.ServiceIdentification
 
-[<RequireQualifiedAccess>]
-module Domain =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
-    let parseStrict = SimpleType.parseStrict Pattern Domain DomainError.Empty DomainError.InvalidFormat
+[<AutoOpen>]
+module SimpleTypes =
 
-    let value (Domain domain) = domain
-    let map = SimpleType.map value Domain
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Domain =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
+        let parseStrict = SimpleType.parseStrict Pattern Domain DomainError.Empty DomainError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module Context =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
-    let parseStrict = SimpleType.parseStrict Pattern Context ContextError.Empty ContextError.InvalidFormat
+        let value (Domain domain) = domain
+        let map = SimpleType.map value Domain
+        let lower = map String.toLower
 
-    let value (Context context) = context
-    let map = SimpleType.map value Context
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Context =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
+        let parseStrict = SimpleType.parseStrict Pattern Context ContextError.Empty ContextError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module Purpose =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
-    let parseStrict = SimpleType.parseStrict Pattern Purpose PurposeError.Empty PurposeError.InvalidFormat
+        let value (Context context) = context
+        let map = SimpleType.map value Context
+        let lower = map String.toLower
 
-    let value (Purpose purpose) = purpose
-    let map = SimpleType.map value Purpose
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Purpose =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
+        let parseStrict = SimpleType.parseStrict Pattern Purpose PurposeError.Empty PurposeError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module PurposePattern =
-    let value = function
-        | PurposePattern.Purpose purpose -> purpose |> Purpose.value
-        | PurposePattern.Any -> Any
+        let value (Purpose purpose) = purpose
+        let map = SimpleType.map value Purpose
+        let lower = map String.toLower
 
-[<RequireQualifiedAccess>]
-module Version =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+[a-zA-Z0-9]*)$"
-    let parseStrict = SimpleType.parseStrict Pattern Version VersionError.Empty VersionError.InvalidFormat
+    [<RequireQualifiedAccess>]
+    module PurposePattern =
+        let value = function
+            | PurposePattern.Purpose purpose -> purpose |> Purpose.value
+            | PurposePattern.Any -> Any
 
-    let value (Version version) = version
-    let map = SimpleType.map value Version
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Version =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+[a-zA-Z0-9]*)$"
+        let parseStrict = SimpleType.parseStrict Pattern Version VersionError.Empty VersionError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module VersionPattern =
-    let value = function
-        | VersionPattern.Version version -> version |> Version.value
-        | VersionPattern.Any -> Any
+        let value (Version version) = version
+        let map = SimpleType.map value Version
+        let lower = map String.toLower
 
-[<RequireQualifiedAccess>]
-module Zone =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
-    let parseStrict = SimpleType.parseStrict Pattern Zone ZoneError.Empty ZoneError.InvalidFormat
+    [<RequireQualifiedAccess>]
+    module VersionPattern =
+        let value = function
+            | VersionPattern.Version version -> version |> Version.value
+            | VersionPattern.Any -> Any
 
-    let value (Zone zone) = zone
-    let map = SimpleType.map value Zone
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Zone =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
+        let parseStrict = SimpleType.parseStrict Pattern Zone ZoneError.Empty ZoneError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module ZonePattern =
-    let value = function
-        | ZonePattern.Zone zone -> zone |> Zone.value
-        | ZonePattern.Any -> Any
+        let value (Zone zone) = zone
+        let map = SimpleType.map value Zone
+        let lower = map String.toLower
 
-[<RequireQualifiedAccess>]
-module Bucket =
-    let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
-    let parseStrict = SimpleType.parseStrict Pattern Bucket BucketError.Empty BucketError.InvalidFormat
+    [<RequireQualifiedAccess>]
+    module ZonePattern =
+        let value = function
+            | ZonePattern.Zone zone -> zone |> Zone.value
+            | ZonePattern.Any -> Any
 
-    let value (Bucket bucket) = bucket
-    let map = SimpleType.map value Bucket
-    let lower = map String.toLower
+    [<RequireQualifiedAccess>]
+    module Bucket =
+        let [<Literal>] Pattern = @"^([a-zA-Z]+)$"
+        let parseStrict = SimpleType.parseStrict Pattern Bucket BucketError.Empty BucketError.InvalidFormat
 
-[<RequireQualifiedAccess>]
-module BucketPattern =
-    let value = function
-        | BucketPattern.Bucket bucket -> bucket |> Bucket.value
-        | BucketPattern.Any -> Any
+        let value (Bucket bucket) = bucket
+        let map = SimpleType.map value Bucket
+        let lower = map String.toLower
+
+    [<RequireQualifiedAccess>]
+    module BucketPattern =
+        let value = function
+            | BucketPattern.Bucket bucket -> bucket |> Bucket.value
+            | BucketPattern.Any -> Any
