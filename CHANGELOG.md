@@ -4,6 +4,13 @@
 ## Unreleased
 - Fix `BoxPattern.createFromStrings` to be useable in Fable environment
 - [*Internal*] Move type modules into separate files
+- Add `map` and `lower` function to *SimpleTypes*:
+    - `Domain.map`, `Domain.lower`
+    - `Context.map`, `Context.lower`
+    - `Purpose.map`, `Purpose.lower`
+    - `Version.map`, `Version.lower`
+    - `Zone.map`, `Zone.lower`
+    - `Bucket.map`, `Bucket.lower`
 
 ## 5.1.1 - 2021-02-09
 - Rename `Lmc.ServiceIdentification.fsproj` back to `ServiceIdentification.fsproj` to match old library
