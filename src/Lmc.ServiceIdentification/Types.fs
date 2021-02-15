@@ -443,7 +443,7 @@ module BoxPattern =
             Bucket = bucket
         }
 
-    let createFromStrings =
+    let createFromStrings strings =
         let ofService domain context = Service.createFromValues domain context |> ofService |> Some
         let ofProcessor domain context purpose = Processor.createFromValues domain context purpose |> ofProcessor |> Some
         let ofInstance domain context purpose version = Instance.createFromValues domain context purpose version |> ofInstance |> Some
@@ -452,7 +452,7 @@ module BoxPattern =
         let withBucket bucket = Option.map (fun (boxPattern: BoxPattern) -> { boxPattern with Bucket = BucketPattern.Bucket bucket })
         let withSpot zone bucket = withZone zone >> withBucket bucket
 
-        function
+        match strings with
         | IsDomain domain, IsContext context, Any,               Any,               Any,         Any             -> ofService domain context
         | IsDomain domain, IsContext context, IsPurpose purpose, Any,               Any,         Any             -> ofProcessor domain context purpose
         | IsDomain domain, IsContext context, IsPurpose purpose, IsVersion version, Any,         Any             -> ofInstance domain context purpose version
