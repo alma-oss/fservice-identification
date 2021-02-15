@@ -2,6 +2,32 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Fix `BoxPattern.createFromStrings` to be useable in Fable environment
+- [*Internal*] Move type modules into separate files
+- Add `map` and `lower` function to *SimpleTypes*:
+    - `Domain.map`, `Domain.lower`
+    - `Context.map`, `Context.lower`
+    - `Purpose.map`, `Purpose.lower`
+    - `Version.map`, `Version.lower`
+    - `Zone.map`, `Zone.lower`
+    - `Bucket.map`, `Bucket.lower`
+- Add `lower` function to *ComposedTypes*:
+    - `Service.lower`
+    - `Processor.lower`
+    - `Instance.lower`
+    - `Box.lower`
+    - `ServiceIdentification.lower`
+- Add `parseStrict` function to types and a specific *ErrorTypes*:
+    - `Domain.parseStrict`
+    - `Context.parseStrict`
+    - `Purpose.parseStrict`
+    - `Version.parseStrict`
+    - `Zone.parseStrict`
+    - `Bucket.parseStrict`
+    - `Service.parseStrict`
+    - `Processor.parseStrict`
+    - `Instance.parseStrict`
+    - `ServiceIdentification.parseStrict`
 
 ## 5.1.1 - 2021-02-09
 - Rename `Lmc.ServiceIdentification.fsproj` back to `ServiceIdentification.fsproj` to match old library

@@ -16,6 +16,10 @@
   <ItemGroup>
     <Compile Include="Utils.fs" />
     <Compile Include="Types.fs" />
+
+    <Compile Include="SimpleTypes.fs" />
+    <Compile Include="ComposedTypes.fs" />
+    <Compile Include="BoxTypes.fs" />
   </ItemGroup>
 
   <ItemGroup>
