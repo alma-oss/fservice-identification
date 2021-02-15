@@ -14,33 +14,39 @@ type Version = Version of string
 type Zone = Zone of string
 type Bucket = Bucket of string
 
+// Errors
+
+[<RequireQualifiedAccess>]
+type DomainError =
+    | Empty
+    | InvalidFormat of string
+
+[<RequireQualifiedAccess>]
+type ContextError =
+    | Empty
+    | InvalidFormat of string
+
+[<RequireQualifiedAccess>]
+type PurposeError =
+    | Empty
+    | InvalidFormat of string
+
+[<RequireQualifiedAccess>]
+type VersionError =
+    | Empty
+    | InvalidFormat of string
+
+[<RequireQualifiedAccess>]
+type ZoneError =
+    | Empty
+    | InvalidFormat of string
+
+[<RequireQualifiedAccess>]
+type BucketError =
+    | Empty
+    | InvalidFormat of string
+
 // Patterns
-
-[<AutoOpen>]
-module internal Matching =
-    let (|IsDomain|_|) = function
-        | String.IsEmpty | Any -> None
-        | domain -> Some (IsDomain (Domain domain))
-
-    let (|IsContext|_|) = function
-        | String.IsEmpty | Any -> None
-        | context -> Some (IsContext (Context context))
-
-    let (|IsPurpose|_|) = function
-        | String.IsEmpty | Any -> None
-        | purpose -> Some (IsPurpose (Purpose purpose))
-
-    let (|IsVersion|_|) = function
-        | String.IsEmpty | Any -> None
-        | version -> Some (IsVersion (Version version))
-
-    let (|IsZone|_|) = function
-        | String.IsEmpty | Any -> None
-        | zone -> Some (IsZone (Zone zone))
-
-    let (|IsBucket|_|) = function
-        | String.IsEmpty | Any -> None
-        | bucket -> Some (IsBucket (Bucket bucket))
 
 [<RequireQualifiedAccess>]
 type PurposePattern =

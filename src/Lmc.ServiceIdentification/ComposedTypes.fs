@@ -1,5 +1,31 @@
 namespace Lmc.ServiceIdentification
 
+[<AutoOpen>]
+module internal Matching =
+    let (|IsDomain|_|) = function
+        | String.IsEmpty | Any -> None
+        | domain -> Some (IsDomain (Domain domain))
+
+    let (|IsContext|_|) = function
+        | String.IsEmpty | Any -> None
+        | context -> Some (IsContext (Context context))
+
+    let (|IsPurpose|_|) = function
+        | String.IsEmpty | Any -> None
+        | purpose -> Some (IsPurpose (Purpose purpose))
+
+    let (|IsVersion|_|) = function
+        | String.IsEmpty | Any -> None
+        | version -> Some (IsVersion (Version version))
+
+    let (|IsZone|_|) = function
+        | String.IsEmpty | Any -> None
+        | zone -> Some (IsZone (Zone zone))
+
+    let (|IsBucket|_|) = function
+        | String.IsEmpty | Any -> None
+        | bucket -> Some (IsBucket (Bucket bucket))
+
 [<RequireQualifiedAccess>]
 module Service =
     let parse (separator: string) (serviceString: string) =
