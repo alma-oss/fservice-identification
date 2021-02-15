@@ -3,6 +3,7 @@
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
 - Fix `BoxPattern.createFromStrings` to be useable in Fable environment
+- [*Internal*] Move type modules into separate files
 
 ## 5.1.1 - 2021-02-09
 - Rename `Lmc.ServiceIdentification.fsproj` back to `ServiceIdentification.fsproj` to match old library
