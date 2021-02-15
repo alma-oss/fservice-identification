@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 5.2.0 - 2021-02-15
 - Fix `BoxPattern.createFromStrings` to be useable in Fable environment
 - [*Internal*] Move type modules into separate files
 - Add `map` and `lower` function to *SimpleTypes*:
