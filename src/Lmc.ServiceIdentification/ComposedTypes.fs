@@ -31,6 +31,12 @@ module Service =
     let domain ({ Domain = domain }: Service) = domain
     let context ({ Context = context }: Service) = context
 
+    let lower (service: Service) =
+        {
+            Domain = service.Domain |> Domain.lower
+            Context = service.Context |> Context.lower
+        }
+
 [<RequireQualifiedAccess>]
 module Processor =
     let parse (separator: string) (processorString: string): Processor option =
@@ -76,6 +82,13 @@ module Processor =
             processor.Purpose |> Purpose.value
         ]
         |> String.concat separator
+
+    let lower (processor: Processor) =
+        {
+            Domain = processor.Domain |> Domain.lower
+            Context = processor.Context |> Context.lower
+            Purpose = processor.Purpose |> Purpose.lower
+        }
 
 [<RequireQualifiedAccess>]
 module Instance =
@@ -142,6 +155,14 @@ module Instance =
 
     let version ({ Version = version }: Instance) = version
 
+    let lower (instance: Instance) =
+        {
+            Domain = instance.Domain |> Domain.lower
+            Context = instance.Context |> Context.lower
+            Purpose = instance.Purpose |> Purpose.lower
+            Version = instance.Version |> Version.lower
+        }
+
 [<RequireQualifiedAccess>]
 module Spot =
     let parse (separator: string) (spotString: string) =
@@ -165,6 +186,12 @@ module Spot =
 
     let zone ({ Zone = zone }: Spot) = zone
     let bucket ({ Bucket = bucket }: Spot) = bucket
+
+    let lower (spot: Spot) =
+        {
+            Zone = spot.Zone |> Zone.lower
+            Bucket = spot.Bucket |> Bucket.lower
+        }
 
 [<RequireQualifiedAccess>]
 module ServiceIdentification =
@@ -219,3 +246,8 @@ module ServiceIdentification =
             | ByInstance _ -> false
             | ByProcessor _ -> false
             | ByService s -> service.Domain = s.Domain && service.Context = s.Context
+
+    let lower = function
+        | ByService service -> service |> Service.lower |> ByService
+        | ByProcessor processor -> processor |> Processor.lower |> ByProcessor
+        | ByInstance instance -> instance |> Instance.lower |> ByInstance

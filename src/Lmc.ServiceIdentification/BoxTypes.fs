@@ -60,6 +60,16 @@ module Box =
             Bucket = box.Bucket
         }
 
+    let lower (box: Box): Box =
+        {
+            Domain = box.Domain |> Domain.lower
+            Context = box.Context |> Context.lower
+            Purpose = box.Purpose |> Purpose.lower
+            Version = box.Version |> Version.lower
+            Zone = box.Zone |> Zone.lower
+            Bucket = box.Bucket |> Bucket.lower
+        }
+
 [<RequireQualifiedAccess>]
 module BoxPattern =
     let ofService (service: Service) =

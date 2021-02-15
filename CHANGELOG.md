@@ -11,6 +11,12 @@
     - `Version.map`, `Version.lower`
     - `Zone.map`, `Zone.lower`
     - `Bucket.map`, `Bucket.lower`
+- Add `lower` function to *ComposedTypes*:
+    - `Service.lower`
+    - `Processor.lower`
+    - `Instance.lower`
+    - `Box.lower`
+    - `ServiceIdentification.lower`
 
 ## 5.1.1 - 2021-02-09
 - Rename `Lmc.ServiceIdentification.fsproj` back to `ServiceIdentification.fsproj` to match old library
