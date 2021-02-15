@@ -17,13 +17,17 @@
     - `Instance.lower`
     - `Box.lower`
     - `ServiceIdentification.lower`
-- Add `parseStrict` function to *SimpleTypes* and a specific *ErrorTypes*:
+- Add `parseStrict` function to types and a specific *ErrorTypes*:
     - `Domain.parseStrict`
     - `Context.parseStrict`
     - `Purpose.parseStrict`
     - `Version.parseStrict`
     - `Zone.parseStrict`
     - `Bucket.parseStrict`
+    - `Service.parseStrict`
+    - `Processor.parseStrict`
+    - `Instance.parseStrict`
+    - `ServiceIdentification.parseStrict`
 
 ## 5.1.1 - 2021-02-09
 - Rename `Lmc.ServiceIdentification.fsproj` back to `ServiceIdentification.fsproj` to match old library

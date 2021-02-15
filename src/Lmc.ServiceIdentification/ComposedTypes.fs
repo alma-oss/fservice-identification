@@ -28,6 +28,25 @@ module internal Matching =
 
 [<RequireQualifiedAccess>]
 module Service =
+    let parseStrict (separator: string) (serviceString: string): Result<Service, ServiceError> =
+        match serviceString.Split(separator) with
+        | [| domain; context |] ->
+            match domain |> Domain.parseStrict, context |> Context.parseStrict with
+            | Ok domain, Ok context -> Ok { Domain = domain; Context = context }
+
+            | domainResult, contextResult ->
+                Error (ServiceError.ServicePart [
+                    match domainResult with
+                    | Error error -> ServicePartError.Domain error
+                    | _ -> ()
+
+                    match contextResult with
+                    | Error error -> ServicePartError.Context error
+                    | _ -> ()
+                ])
+
+        | _ -> Error (ServiceError.InvalidFormat serviceString)
+
     let parse (separator: string) (serviceString: string) =
         match serviceString.Split(separator) with
         | [| IsDomain domain; IsContext context |] ->
@@ -65,6 +84,29 @@ module Service =
 
 [<RequireQualifiedAccess>]
 module Processor =
+    let parseStrict (separator: string) (processorString: string): Result<Processor, ProcessorError> =
+        match processorString.Split(separator) with
+        | [| domain; context; purpose |] ->
+            match domain |> Domain.parseStrict, context |> Context.parseStrict, purpose |> Purpose.parseStrict with
+            | Ok domain, Ok context, Ok purpose -> Ok { Domain = domain; Context = context; Purpose = purpose }
+
+            | domainResult, contextResult, purposeResult ->
+                Error (ProcessorError.ProcessorPart [
+                    match domainResult with
+                    | Error error -> ProcessorPartError.Domain error
+                    | _ -> ()
+
+                    match contextResult with
+                    | Error error -> ProcessorPartError.Context error
+                    | _ -> ()
+
+                    match purposeResult with
+                    | Error error -> ProcessorPartError.Purpose error
+                    | _ -> ()
+                ])
+
+        | _ -> Error (ProcessorError.InvalidFormat processorString)
+
     let parse (separator: string) (processorString: string): Processor option =
         match processorString.Split(separator) with
         | [| IsDomain domain; IsContext context; IsPurpose purpose |] ->
@@ -118,6 +160,33 @@ module Processor =
 
 [<RequireQualifiedAccess>]
 module Instance =
+    let parseStrict (separator: string) (instanceString: string) =
+        match instanceString.Split(separator) with
+        | [| domain; context; purpose; version |] ->
+            match domain |> Domain.parseStrict, context |> Context.parseStrict, purpose |> Purpose.parseStrict, version |> Version.parseStrict with
+            | Ok domain, Ok context, Ok purpose, Ok version -> Ok { Domain = domain; Context = context; Purpose = purpose; Version = version }
+
+            | domainResult, contextResult, purposeResult, versionResult ->
+                Error (InstanceError.InstancePart [
+                    match domainResult with
+                    | Error error -> InstancePartError.Domain error
+                    | _ -> ()
+
+                    match contextResult with
+                    | Error error -> InstancePartError.Context error
+                    | _ -> ()
+
+                    match purposeResult with
+                    | Error error -> InstancePartError.Purpose error
+                    | _ -> ()
+
+                    match versionResult with
+                    | Error error -> InstancePartError.Version error
+                    | _ -> ()
+                ])
+
+        | _ -> Error (InstanceError.InvalidFormat instanceString)
+
     let parse (separator: string) (instanceString: string) =
         match instanceString.Split(separator) with
         | [| IsDomain domain; IsContext context; IsPurpose purpose; IsVersion version |] ->
@@ -191,6 +260,25 @@ module Instance =
 
 [<RequireQualifiedAccess>]
 module Spot =
+    let parseStrict (separator: string) (spotString: string) =
+        match spotString.Split(separator) with
+        | [| zone; bucket |] ->
+            match zone |> Zone.parseStrict, bucket |> Bucket.parseStrict with
+            | Ok zone, Ok bucket -> Ok { Zone = zone; Bucket = bucket }
+
+            | zoneResult, bucketResult ->
+                Error (SpotError.SpotPart [
+                    match zoneResult with
+                    | Error error -> SpotPartError.Zone error
+                    | _ -> ()
+
+                    match bucketResult with
+                    | Error error -> SpotPartError.Bucket error
+                    | _ -> ()
+                ])
+
+        | _ -> Error (SpotError.InvalidFormat spotString)
+
     let parse (separator: string) (spotString: string) =
         match spotString.Split(separator) with
         | [| IsZone zone; IsBucket bucket |] ->
@@ -225,6 +313,25 @@ module ServiceIdentification =
         | ByService service -> service
         | ByProcessor processor -> processor |> Processor.service
         | ByInstance instance -> instance |> Instance.service
+
+    let parseStrict (separator: string) (serviceIdentificationString: string): Result<ServiceIdentification, ServiceIdentificationError> =
+        match serviceIdentificationString.Split separator with
+        | [| _domain; _context; _purpose; _version |] ->
+            Instance.parseStrict separator serviceIdentificationString
+            |> Result.map ByInstance
+            |> Result.mapError ServiceIdentificationError.InstanceError
+
+        | [| _domain; _context; _purpose |] ->
+            Processor.parseStrict separator serviceIdentificationString
+            |> Result.map ByProcessor
+            |> Result.mapError ServiceIdentificationError.ProcessorError
+
+        | [| _domain; _context |] ->
+            Service.parseStrict separator serviceIdentificationString
+            |> Result.map ByService
+            |> Result.mapError ServiceIdentificationError.ServiceError
+
+        | _ -> Error (ServiceIdentificationError.InvalidFormat serviceIdentificationString)
 
     let parse (separator: string) (serviceIdentificationString: string) =
         match serviceIdentificationString.Split separator with

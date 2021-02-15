@@ -117,3 +117,55 @@ type ServiceIdentification =
     | ByService of Service
     | ByProcessor of Processor
     | ByInstance of Instance
+
+// Errors
+
+[<RequireQualifiedAccess>]
+type ServicePartError =
+    | Domain of DomainError
+    | Context of ContextError
+
+[<RequireQualifiedAccess>]
+type ServiceError =
+    | InvalidFormat of string
+    | ServicePart of ServicePartError list
+
+[<RequireQualifiedAccess>]
+type ProcessorPartError =
+    | Domain of DomainError
+    | Context of ContextError
+    | Purpose of PurposeError
+
+[<RequireQualifiedAccess>]
+type ProcessorError =
+    | InvalidFormat of string
+    | ProcessorPart of ProcessorPartError list
+
+[<RequireQualifiedAccess>]
+type InstancePartError =
+    | Domain of DomainError
+    | Context of ContextError
+    | Purpose of PurposeError
+    | Version of VersionError
+
+[<RequireQualifiedAccess>]
+type InstanceError =
+    | InvalidFormat of string
+    | InstancePart of InstancePartError list
+
+[<RequireQualifiedAccess>]
+type SpotPartError =
+    | Zone of ZoneError
+    | Bucket of BucketError
+
+[<RequireQualifiedAccess>]
+type SpotError =
+    | InvalidFormat of string
+    | SpotPart of SpotPartError list
+
+[<RequireQualifiedAccess>]
+type ServiceIdentificationError =
+    | InvalidFormat of string
+    | ServiceError of ServiceError
+    | ProcessorError of ProcessorError
+    | InstanceError of InstanceError
