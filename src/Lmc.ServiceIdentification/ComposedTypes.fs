@@ -310,6 +310,13 @@ module ComposedTypes =
                 Bucket = spot.Bucket |> Bucket.lower
             }
 
+        let concat separator (spot: Spot) =
+            [
+                spot.Zone |> Zone.value
+                spot.Bucket |> Bucket.value
+            ]
+            |> String.concat separator
+
     [<RequireQualifiedAccess>]
     module ServiceIdentification =
         let service = function

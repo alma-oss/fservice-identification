@@ -2,6 +2,7 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `Spot.concat` function
 
 ## 5.2.0 - 2021-02-15
 - Fix `BoxPattern.createFromStrings` to be useable in Fable environment
