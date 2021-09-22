@@ -1,7 +1,7 @@
 #load ".fake/build.fsx/intellisense.fsx"
 
 // ========================================================================================================
-// === F# / Library fake build ==================================================================== 2.0.1 =
+// === F# / Fable Library fake build ============================================================== 2.0.0 =
 // --------------------------------------------------------------------------------------------------------
 // Options:
 //  - no-clean   - disables clean of dirs in the first step (required on CI)
@@ -39,9 +39,7 @@ let gitBranch = Information.getBranchName(".")
 [<RequireQualifiedAccess>]
 module ProjectSources =
     let library =
-        !! "./*.fsproj"
-        ++ "src/*.fsproj"
-        ++ "src/**/*.fsproj"
+        !! "src/**/*.fsproj"
 
     let tests =
         !! "tests/*.fsproj"
@@ -165,7 +163,7 @@ Target.create "Tests" (fun _ ->
 )
 
 Target.create "Release" (fun _ ->
-    Dotnet.runInRootOrFail "pack"
+    Dotnet.runOrFail "pack" ("src" </> project)
 
     Directory.ensure "release"
 
