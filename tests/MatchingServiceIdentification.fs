@@ -1,4 +1,4 @@
-module DependencyConsole.Test.MatchingServiceIdentification
+module Lmc.ServiceIdentification.Test.MatchingServiceIdentification
 
 open Expecto
 open Lmc.ServiceIdentification

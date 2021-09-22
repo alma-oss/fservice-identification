@@ -169,3 +169,10 @@ type ServiceIdentificationError =
     | ServiceError of ServiceError
     | ProcessorError of ProcessorError
     | InstanceError of InstanceError
+
+[<RequireQualifiedAccess>]
+type BoxError =
+    | InvalidFormat of string
+    | InstanceError of InstanceError
+    | SpotError of SpotError
+    | InstanceAndSpotError of InstanceError * SpotError

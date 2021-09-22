@@ -20,6 +20,8 @@
     <Compile Include="SimpleTypes.fs" />
     <Compile Include="ComposedTypes.fs" />
     <Compile Include="BoxTypes.fs" />
+
+    <Compile Include="Create.fs" />
   </ItemGroup>
 
   <ItemGroup>

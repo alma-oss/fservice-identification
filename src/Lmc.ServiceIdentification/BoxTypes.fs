@@ -49,6 +49,19 @@ module BoxTypes =
                 Bucket = bucket
             }
 
+        let parseStrict (separator: string) (value: string) =
+            match value.Split "@" |> Seq.toList with
+            | [ spot; instance ] ->
+                let instance = instance |> Instance.parseStrict separator
+                let spot = spot |> Spot.parseStrict separator
+
+                match instance, spot with
+                | Ok instance, Ok spot -> ofInstance instance spot.Zone spot.Bucket |> Ok
+                | Error instanceError, Error spotError -> Error (BoxError.InstanceAndSpotError (instanceError, spotError))
+                | Error instanceError, _ -> Error (BoxError.InstanceError instanceError)
+                | _, Error spotError -> Error (BoxError.SpotError spotError)
+            | _ -> Error (BoxError.InvalidFormat value)
+
         let instance (box: Box) =
             {
                 Domain = box.Domain
@@ -72,6 +85,11 @@ module BoxTypes =
                 Zone = box.Zone |> Zone.lower
                 Bucket = box.Bucket |> Bucket.lower
             }
+
+        let value (box: Box) =
+            let spot = box |> spot |> Spot.concat "-"
+            let instance = box |> instance |> Instance.concat "-"
+            $"{spot}@{instance}"
 
     [<RequireQualifiedAccess>]
     module BoxPattern =

@@ -2,6 +2,10 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Add `Create` static class
+- Add `Box` functions
+    - `Box.parseStrict`
+    - `Box.value`
 
 ## 5.3.0 - 2021-08-06
 - Add `Spot.concat` function
