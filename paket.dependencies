@@ -7,11 +7,9 @@ nuget FSharp.Core ~> 5.0
 git ssh://git@bitbucket.lmc.cz:7999/archi/nuget-server.git master Packages: /nuget/
 # LMC Nuget dependencies:
 
-group Tests
-    storage: none
-    source https://api.nuget.org/v3/index.json
-    nuget Expecto
-    nuget YoloDev.Expecto.TestSdk
+# Tests
+nuget Expecto
+nuget YoloDev.Expecto.TestSdk
 
 // [ FAKE GROUP ]
 group Build
