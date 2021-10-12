@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+
+## 5.5.0 - 2021-10-12
 - Update dependencies
 - Fix `Create.Spot` with `Zone` and `Bucket`
 
