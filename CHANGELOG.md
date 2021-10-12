@@ -2,6 +2,8 @@
 
 <!-- There is always Unreleased section on the top. Subsections (Add, Changed, Fix, Removed) should be Add as needed. -->
 ## Unreleased
+- Update dependencies
+- Fix `Create.Spot` with `Zone` and `Bucket`
 
 ## 5.4.0 - 2021-09-22
 - Add `Create` static class

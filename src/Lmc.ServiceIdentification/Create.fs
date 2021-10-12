@@ -87,7 +87,7 @@ type Create() =
     static member Spot(zone: string, bucket: string) = (sprintf "%s,%s" zone bucket) |> Spot.parseStrict ","
     static member Spot(Zone zone, bucket: string) = (sprintf "%s,%s" zone bucket) |> Spot.parseStrict ","
     static member Spot(zone: string, Bucket bucket) = (sprintf "%s,%s" zone bucket) |> Spot.parseStrict ","
-    static member Spot(Zone zone, Bucket bucket) = (sprintf "%s,%s" zone bucket) |> Spot.parseStrict ","
+    static member Spot(zone, bucket) = Spot.createFromValues zone bucket
     static member Spot(box: Box) = box |> Box.spot
 
     static member Box(box: string) = box |> Box.parseStrict "-"
