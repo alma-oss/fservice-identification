@@ -1,7 +1,7 @@
-module Lmc.ServiceIdentification.Test.MatchingServiceIdentification
+module Alma.ServiceIdentification.Test.MatchingServiceIdentification
 
 open Expecto
-open Lmc.ServiceIdentification
+open Alma.ServiceIdentification
 
 let orFail = function
     | Some value -> value

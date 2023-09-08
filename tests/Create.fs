@@ -1,7 +1,7 @@
-module Lmc.ServiceIdentification.Test.Create
+module Alma.ServiceIdentification.Test.Create
 
 open Expecto
-open Lmc.ServiceIdentification
+open Alma.ServiceIdentification
 
 type SimpleTypeTest<'SimpleType> = {
     Description: string

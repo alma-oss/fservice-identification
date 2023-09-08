@@ -1,4 +1,4 @@
-namespace Lmc.ServiceIdentification
+namespace Alma.ServiceIdentification
 
 [<AutoOpen>]
 module ComposedTypes =

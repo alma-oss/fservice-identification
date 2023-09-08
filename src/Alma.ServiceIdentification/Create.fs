@@ -1,4 +1,4 @@
-namespace Lmc.ServiceIdentification
+namespace Alma.ServiceIdentification
 
 type Create() =
     // Simple types
