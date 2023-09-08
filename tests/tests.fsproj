@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../src/Lmc.ServiceIdentification/ServiceIdentification.fsproj" />
+    <ProjectReference Include="../src/Alma.ServiceIdentification/ServiceIdentification.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
