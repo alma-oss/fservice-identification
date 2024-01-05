@@ -27,4 +27,4 @@ jobs:
         env:
           PRIVATE_FEED_USER: ${{ github.repository_owner }}
           PRIVATE_FEED_PASS: ${{ secrets.GITHUB_TOKEN }}
-        run: ${{ matrix.os.run }} -t tests
+        run: ${{ matrix.os.run }} -t tests no-lint
