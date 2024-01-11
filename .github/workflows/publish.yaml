@@ -9,6 +9,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,4 +36,4 @@ jobs:
           NUGET_SERVER_TOKEN: ${{ steps.generate_token.outputs.token }}
           NUGET_SERVER_ORGANIZATION: ${{ github.repository_owner }}
           NUGET_SERVER_REPOSITORY: "prc-nuget-server"
-        run: ./build.sh -t publish no-lint
+        run: ./build.sh -t publish
