@@ -36,4 +36,5 @@ jobs:
           NUGET_SERVER_TOKEN: ${{ steps.generate_token.outputs.token }}
           NUGET_SERVER_ORGANIZATION: ${{ github.repository_owner }}
           NUGET_SERVER_REPOSITORY: "prc-nuget-server"
+          DOTNET_ROLL_FORWARD: latestMajor
         run: ./build.sh -t publish
