@@ -1,6 +1,10 @@
 F-Service-Identification
 ========================
 
+[![NuGet](https://img.shields.io/nuget/v/Alma.ServiceIdentification.svg)](https://www.nuget.org/packages/Alma.ServiceIdentification)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Alma.ServiceIdentification.svg)](https://www.nuget.org/packages/Alma.ServiceIdentification)
+[![Tests](https://github.com/alma-oss/fservice-identification/actions/workflows/tests.yaml/badge.svg)](https://github.com/alma-oss/fservice-identification/actions/workflows/tests.yaml)
+
 Library for Service Identification types.
 
 ## Install
