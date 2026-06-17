@@ -1,0 +1,113 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fservice-identification
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fservice-identification/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:50481ab104051cd15ef09f923de4ef2582528c67b247052db20e83667793b75d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fservice-identification/references/anti-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b422b2748847563921378677311e7840e0571c5109f10627eb604287e4b550b7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fservice-identification/references/examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8a2318c483c6a0acf4a696a8429397339b705a6556359922d711e9328870bf52
+- kind: project-relative
+  target: claude
+  value: .claude/skills/fservice-identification/references/preferred-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:17306effc1c22689b9ff5427d883e17e4f024549487e317678a3748ea3251739
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fservice-identification
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fservice-identification/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:50481ab104051cd15ef09f923de4ef2582528c67b247052db20e83667793b75d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fservice-identification/references/anti-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b422b2748847563921378677311e7840e0571c5109f10627eb604287e4b550b7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fservice-identification/references/examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8a2318c483c6a0acf4a696a8429397339b705a6556359922d711e9328870bf52
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/fservice-identification/references/preferred-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:17306effc1c22689b9ff5427d883e17e4f024549487e317678a3748ea3251739
+local_deployed_files:
+- .agents/skills/fservice-identification
+- .agents/skills/fservice-identification/SKILL.md
+- .agents/skills/fservice-identification/references/anti-patterns.md
+- .agents/skills/fservice-identification/references/examples.md
+- .agents/skills/fservice-identification/references/preferred-patterns.md
+- .claude/skills/fservice-identification
+- .claude/skills/fservice-identification/SKILL.md
+- .claude/skills/fservice-identification/references/anti-patterns.md
+- .claude/skills/fservice-identification/references/examples.md
+- .claude/skills/fservice-identification/references/preferred-patterns.md
+local_deployed_file_hashes:
+  .agents/skills/fservice-identification/SKILL.md: sha256:50481ab104051cd15ef09f923de4ef2582528c67b247052db20e83667793b75d
+  .agents/skills/fservice-identification/references/anti-patterns.md: sha256:b422b2748847563921378677311e7840e0571c5109f10627eb604287e4b550b7
+  .agents/skills/fservice-identification/references/examples.md: sha256:8a2318c483c6a0acf4a696a8429397339b705a6556359922d711e9328870bf52
+  .agents/skills/fservice-identification/references/preferred-patterns.md: sha256:17306effc1c22689b9ff5427d883e17e4f024549487e317678a3748ea3251739
+  .claude/skills/fservice-identification/SKILL.md: sha256:50481ab104051cd15ef09f923de4ef2582528c67b247052db20e83667793b75d
+  .claude/skills/fservice-identification/references/anti-patterns.md: sha256:b422b2748847563921378677311e7840e0571c5109f10627eb604287e4b550b7
+  .claude/skills/fservice-identification/references/examples.md: sha256:8a2318c483c6a0acf4a696a8429397339b705a6556359922d711e9328870bf52
+  .claude/skills/fservice-identification/references/preferred-patterns.md: sha256:17306effc1c22689b9ff5427d883e17e4f024549487e317678a3748ea3251739
