@@ -7,10 +7,19 @@ let orFail = function
     | Some value -> value
     | None -> failtestf "Value is not in correct format."
 
+let okOrFail = function
+    | Ok value -> value
+    | Error error -> failtestf "Value is not in correct format: %A" error
+
 let ``consents-consentor`` = "consents-consentor" |> Service.parse "-" |> orFail |> ByService
 let ``consents-consentor-common`` = "consents-consentor-common" |> Processor.parse "-" |> orFail |> ByProcessor
 let ``consents-consentor-common-latest`` = "consents-consentor-common-latest" |> Instance.parse "-" |> orFail |> ByInstance
 let ``consents-mailer`` = "consents-mailer" |> Service.parse "-" |> orFail |> ByService
+
+let ``domain-portal-dev-stable in all.dev`` =
+    let instance = "domain-portal-dev-stable" |> Instance.parse "-" |> orFail
+    let spot = "all.dev" |> Spot.parse "." |> orFail
+    Box.ofInstance instance spot.Zone spot.Bucket
 
 let provideServiceIdentifications =
     [
@@ -41,4 +50,32 @@ let matchingServiceIdentificationTests =
             |> List.iter (fun (serviceIdentification, pattern, expected, description) ->
                 Expect.equal (serviceIdentification |> ServiceIdentification.isMatching pattern) expected description
             )
+    ]
+
+[<Tests>]
+let matchingBoxPatternTests =
+    testList "Box - matching processor patterns" [
+        testCase "instance domain-portal-dev-stable in spot all.dev is matching one of patterns" <| fun _ ->
+            let p (processor: string) =
+                Create.Processor(processor)
+                |> okOrFail
+                |> Processor.lower
+                |> BoxPattern.ofProcessor
+
+            // processorPattern "domain-portal-dev", devConfig
+            // processorPattern "domain-portal-prod", prodConfig
+            // processorPattern "domain-iosApp-prod", prodConfig
+            let box = ``domain-portal-dev-stable in all.dev``
+            let patterns = [
+                p "domain-portal-dev"
+                p "domain-portal-prod"
+                p "domain-iosapp-prod"
+            ]
+
+            let box = box |> Box.lower
+
+            Expect.isTrue  (patterns |> List.exists (BoxPattern.isMatching box)) "should match one of the patterns"
+            Expect.isTrue  (patterns[0] |> BoxPattern.isMatching box) "should match domain-portal-dev"
+            Expect.isFalse (patterns[1] |> BoxPattern.isMatching box) "should not match domain-portal-prod"
+            Expect.isFalse (patterns[2] |> BoxPattern.isMatching box) "should not match domain-iosapp-prod"
     ]

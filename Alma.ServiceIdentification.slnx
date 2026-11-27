@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Alma.ServiceIdentification/ServiceIdentification.fsproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/tests.fsproj" />
+  </Folder>
+</Solution>
